@@ -1,0 +1,13 @@
+# environment
+.env
+app/.env
+
+# python
+__pycache__/
+*.pyc
+
+# virtual environment
+.venv/
+
+# docker
+*.log
