@@ -11,6 +11,9 @@ services:
 
     restart: always
 
+    networks:
+      - backend
+
   prometheus:
 
     image: prom/prometheus
@@ -28,7 +31,10 @@ services:
     depends_on:
 
       - node-exporter
-      
+    
+    networks:
+      - backend
+
   grafana:
 
     image: grafana/grafana
@@ -42,3 +48,12 @@ services:
     depends_on:
 
       - prometheus
+
+    networks:
+      - backend
+
+networks:
+
+  backend:
+    external: 
+      name: docker_backend
