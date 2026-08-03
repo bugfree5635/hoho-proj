@@ -1,0 +1,31 @@
+- name: Install Docker
+  hosts: servers
+  become: yes
+
+  tasks:
+
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+
+    - name: Install docker packages
+      apt:
+        name:
+          - docker.io
+          - docker-compose-v2
+        state: present
+
+
+    - name: Enable docker service
+      systemd:
+        name: docker
+        enabled: yes
+        state: started
+
+
+    - name: Add user to docker group
+      user:
+        name: "{{ ansible_user }}"
+        groups: docker
+        append: yes

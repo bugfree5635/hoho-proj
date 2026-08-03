@@ -5,6 +5,7 @@ app/.env
 # python
 __pycache__/
 *.pyc
+.pytest_cache/
 
 # virtual environment
 .venv/
