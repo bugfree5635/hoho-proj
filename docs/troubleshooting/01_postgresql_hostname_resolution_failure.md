@@ -235,6 +235,17 @@ sudo tee /etc/docker/daemon.json <<-'EOF'
 }
 EOF
 
+https://docker.1panel.live
+https://docker.1ms.run
+https://hub.rat.dev
+sudo tee /etc/docker/daemon.json <<-'EOF'
+{                                         
+    "registry-mirrors": [
+     "https://hub.rat.dev"
+    ]
+}
+EOF
+
 sudo tee /etc/systemd/system/docker.service.d/http-proxy.conf <<-'EOF'
 [Service]
 Environment="HTTP_PROXY=http://127.0.0.1:7897"
