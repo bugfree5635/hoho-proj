@@ -20,7 +20,7 @@ jobs:
       postgres:
         image: postgres:16
         env:
-          POSTGRES_DB: company
+          POSTGRES_DB: company_test
           POSTGRES_USER: admin
           POSTGRES_PASSWORD: password
         ports:
@@ -52,8 +52,10 @@ jobs:
         env:
           DATABASE_HOST: localhost
           DATABASE_PORT: 5432
-          DATABASE_NAME: company
+          DATABASE_NAME: company_test
           DATABASE_USER: admin
           DATABASE_PASSWORD: password
         run: |
-          pytest
+          pytest --cov=app --cov-report=term-missing --cov-fail-under=80
+      
+      
