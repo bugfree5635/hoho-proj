@@ -5,7 +5,7 @@ from sqlalchemy.orm import (
     declarative_base
 )
 
-from config.settings import settings
+from ..config.settings import settings
 
 
 

@@ -1,16 +1,16 @@
 from fastapi import FastAPI
 
-from database.connection import engine
-from database.models import Base
+from .database.connection import engine
+from .database.models import Base
 
-from api.employees import router
+from .api.employees import router
 
 import time
 
 from prometheus_client import generate_latest
 from fastapi.responses import Response
 
-from monitoring.metrics import (
+from .monitoring.metrics import (
     REQUEST_COUNT,
     REQUEST_TIME
 )

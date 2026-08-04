@@ -5,7 +5,7 @@ from sqlalchemy import (
 )
 
 
-from database.connection import Base
+from .connection import Base
 
 
 

@@ -7,11 +7,11 @@ from fastapi import (
 from sqlalchemy.orm import Session
 
 
-from database.connection import get_database
+from ..database.connection import get_database
 
-from database.models import Employee
+from ..database.models import Employee
 
-from schemas.employee import (
+from ..schemas.employee import (
     EmployeeCreate,
     EmployeeResponse
 )
