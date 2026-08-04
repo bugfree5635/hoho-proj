@@ -41,7 +41,5 @@ jobs:
           DATABASE_NAME: company
           DATABASE_USER: admin
           DATABASE_PASSWORD: password
-
-      - name: Run tests
         run: |
           pytest
