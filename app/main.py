@@ -1,3 +1,4 @@
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
 from .database.connection import engine
@@ -15,13 +16,21 @@ from .monitoring.metrics import (
     REQUEST_TIME
 )
 
-# Create database tables
-Base.metadata.create_all(bind=engine)
+@asynccontextmanager
+async def lifespan(app: FastAPI):
 
+    # startup
+    Base.metadata.create_all(bind=engine)
+
+    yield
+
+    # shutdown
+    engine.dispose()
 
 app = FastAPI(
     title="Employee Management API",
-    version="1.0"
+    version="1.0",
+    lifespan=lifespan
 )
 
 
