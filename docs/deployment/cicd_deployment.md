@@ -2,62 +2,84 @@
 
 ## Overview
 
-This project uses GitHub Actions to automate:
+This project uses GitHub Actions to automate the Continuous Integration (CI) process.
 
-- Python testing
-- Dependency installation
-- Docker image building
-- Deployment preparation
+The current pipeline validates application changes by:
+
+- Installing Python dependencies
+- Starting a PostgreSQL test database
+- Running automated tests
+- Verifying application functionality
 
 
-Workflow:
+Current workflow:
 
 ```
-
 Developer
 
-|
-|
-git push
+    |
+    |
+ git push / Pull Request
 
-|
-|
+    |
+    |
 GitHub Actions
 
-|
-|
-Run tests
+    |
+    |
+ Setup Python Environment
 
-|
-|
-Build Docker image
+    |
+    |
+ Start PostgreSQL Service
 
-|
-|
-Deploy application
+    |
+    |
+ Install Dependencies
 
+    |
+    |
+ Run pytest
+
+    |
+    |
+ Pass / Fail
 ```
 
 
-## CI Pipeline
+## Continuous Integration (CI)
 
-Continuous Integration checks that new code does not break the application.
+Continuous Integration ensures that new code changes do not break the application.
 
-Current CI tasks:
+The CI pipeline runs automatically when:
 
-1. Checkout source code
+- Code is pushed to `main`
+- A Pull Request is created targeting `main`
+
+### CI Workflow
+
+Current workflow file:
+
+```
+.github/workflows/ci.yml
+```
+
+Pipeline steps:
+
+1. Checkout repository
 
 2. Setup Python environment
 
-3. Install dependencies
+3. Start PostgreSQL database service
 
-4. Run pytest
+4. Install application dependencies
 
+5. Run automated tests
 
-Example:
+Example workflow:
 
 ```yaml
-name: CI
+name: CI Pipeline
 
 on:
   push:
@@ -75,6 +97,23 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: company
+          POSTGRES_USER: admin
+          POSTGRES_PASSWORD: password
+
+        ports:
+          - 5432:5432
+
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
 
       - name: Checkout code
@@ -88,28 +127,50 @@ jobs:
 
 
       - name: Install dependencies
-        run:
+        run: |
 
           pip install -r app/requirements.txt
 
 
       - name: Run tests
-        run:
+        env:
+          DATABASE_HOST: localhost
+          DATABASE_PORT: 5432
+          DATABASE_NAME: company
+          DATABASE_USER: admin
+          DATABASE_PASSWORD: password
+
+        run: |
 
           pytest
 ```
 
-## Environment Variables
+## Test Database Configuration
 
-GitHub Actions runs on a clean machine.
+GitHub Actions runs inside a fresh Ubuntu runner.
 
-It does not contain:
+The runner does not contain:
 
-* local .env
-* database configuration
-* Docker network
+- Local `.env` files
+- Development databases
+- Docker Compose networks
 
-CI variables should be configured:
+
+Therefore, CI creates a temporary PostgreSQL service container:
+
+```
+GitHub Runner
+
+      |
+      |
+PostgreSQL 16 Container
+
+      |
+      |
+FastAPI Tests
+```
+
+Database configuration is provided through environment variables:
 
 ```
 DATABASE_HOST
@@ -123,42 +184,105 @@ Example:
 
 ```yaml
 env:
-
   DATABASE_HOST: localhost
-
   DATABASE_PORT: 5432
-
   DATABASE_NAME: company
-
   DATABASE_USER: admin
-
   DATABASE_PASSWORD: password
 ```
 
+## Pull Request Workflow
+
+Development process:
+
+```
+Create Feature Branch
+
+        |
+        |
+Commit Changes
+
+        |
+        |
+Open Pull Request
+
+        |
+        |
+GitHub Actions Runs
+
+        |
+        |
+pytest Successful
+
+        |
+        |
+Code Review
+
+        |
+        |
+Merge main
+```
+
+Branch protection rules are configured to require:
+
+- Successful CI checks
+- Pull request review approval
+
 ## Docker Build Pipeline
 
-After tests pass:
+### Current Status
+
+Docker deployment is implemented using Docker Compose.
+
+Current workflow:
+
+```
+Developer
+
+    |
+    |
+Git Push
+
+    |
+    |
+GitHub Actions
+
+    |
+    |
+pytest
+
+    |
+    |
+Merge
+```
+
+
+Docker image building is currently performed during deployment.
+
+Future CI improvement:
 
 ```
 pytest
 
    |
-
+   |
 docker build
 
    |
+   |
+Docker Image
 
-Docker image
-
+   |
+   |
+Push Registry
 ```
 
-Example:
+Example future step:
 
 ```yaml
 - name: Build Docker image
 
-  run:
-
+  run: |
     docker build \
     -t employee-api \
     ./app
@@ -166,96 +290,145 @@ Example:
 
 ## Deployment Pipeline
 
-Future deployment:
+### Current Deployment
+
+Application deployment is currently performed using:
+
+- Docker Compose
+- Nginx
+- PostgreSQL
+- Prometheus
+- Grafana
+
+
+Deployment flow:
+
+```
+Ubuntu Server
+
+      |
+      |
+Docker Compose
+
+      |
+      |
+Application Containers
+
+      |
+      |
+Running Service
+```
+
+### Future Automated Deployment
+
+Future CI/CD pipeline:
 
 ```
 GitHub Actions
 
         |
+        |
+Docker Image Build
 
         |
-
-SSH
+        |
+Container Registry
 
         |
+        |
+SSH Deployment
 
         |
-
-Ubuntu Server
+        |
+Production Server
 
         |
-
         |
-
-Docker Compose
-
-        |
-
-        |
-
-Application running
-
+Docker Compose Restart
 ```
 
 Deployment steps:
 
-1. Connect server using SSH key
-
-2. Pull latest code
-
-3. Rebuild containers
-
-4. Restart services
+1. Build Docker image
+2. Push image to registry
+3. Connect server using SSH key
+4. Pull latest image
+5. Restart containers
 
 Example:
 
 ```bash
 docker compose pull
 
-docker compose up -d --build
+docker compose up -d
 ```
 
 ## Secrets Management
 
-Sensitive data should not be stored in Git.
-
-Example:
-
+Sensitive information should never be committed to Git.
 Bad:
 
-```
+```env
 DATABASE_PASSWORD=password
 ```
 
-Good:
+Better:
 
 ```
 GitHub Secrets
 
-        |
+       |
+       |
+GitHub Actions Environment
 
-        |
-
-Workflow Environment
-
-        |
-
-        |
-
+       |
+       |
 Application
 ```
 
-## Current Status
+Recommended secrets:
 
-Implemented:
+```
+DATABASE_PASSWORD
 
-* GitHub Actions CI
-* Automated pytest
-* Docker build verification
+SSH_PRIVATE_KEY
+
+DOCKER_USERNAME
+
+DOCKER_TOKEN
+```
+
+## Troubleshooting During Development
+
+Common CI/CD issues documented:
+
+- PostgreSQL hostname resolution failure
+- Missing environment variables
+- Python dependency compatibility
+- Docker networking problems
+- Container communication failures
+
+Detailed troubleshooting:
+
+```
+docs/troubleshooting/
+```
+
+# Current Status
+
+Completed:
+
+- [x] GitHub Actions CI pipeline
+- [x] Automated pytest execution
+- [x] PostgreSQL service container
+- [x] Pull request validation
+- [x] Branch protection rules
 
 Future improvements:
 
-* Docker image push to registry
-* Automatic deployment
-* HTTPS deployment
-* Rollback strategy
+- [ ] Docker image build in CI
+- [ ] Push image to GitHub Container Registry
+- [ ] Automated server deployment
+- [ ] HTTPS deployment
+- [ ] Deployment rollback strategy
+- [ ] Kubernetes deployment

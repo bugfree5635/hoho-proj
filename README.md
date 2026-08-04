@@ -3,106 +3,173 @@
   <br>
 </h1>
 
-<h4 align="center">
-A production-style FastAPI application with Docker deployment, PostgreSQL, Nginx, and monitoring infrastructure.
-</h4>
+<p align="center">
+  A production-oriented FastAPI backend demonstrating containerization,
+  database management, CI/CD automation, monitoring, and infrastructure operations.
+</p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Python-3.14-blue?style=flat-square" alt="Python">
-  <img src="https://img.shields.io/badge/FastAPI-REST%20API-green?style=flat-square" alt="FastAPI">
-  <img src="https://img.shields.io/badge/Docker-Containerized-blue?style=flat-square" alt="Docker">
-  <img src="https://img.shields.io/badge/PostgreSQL-16-blue?style=flat-square" alt="PostgreSQL">
-  <img src="https://img.shields.io/badge/Monitoring-Prometheus%20%7C%20Grafana-orange?style=flat-square" alt="Monitoring">
+
+<img src="https://img.shields.io/badge/Python-3.14-blue">
+<img src="https://img.shields.io/badge/FastAPI-REST%20API-green">
+<img src="https://img.shields.io/badge/PostgreSQL-16-blue">
+<img src="https://img.shields.io/badge/Docker-Containerized-blue">
+<img src="https://img.shields.io/badge/Monitoring-Prometheus%20%7C%20Grafana-orange">
+
 </p>
 
 ## Overview
 
-Employee Management API is a backend application built with FastAPI and designed to simulate a real-world production deployment environment.
+Employee Management API is a backend system built with **FastAPI** that simulates a real-world deployment environment.
 
-The project focuses not only on application development, but also on:
+The project focuses on more than API development. It includes:
 
-* Container deployment
-* Database management
-* Reverse proxy configuration
-* Infrastructure monitoring
-* Troubleshooting and operations practice
+- Backend application development
+- PostgreSQL database integration
+- Docker-based deployment
+- Reverse proxy configuration
+- Monitoring infrastructure
+- CI/CD automation
+- Infrastructure troubleshooting
+
 
 ## Architecture
 
 ```
-                    Client
-
-                      |
-
-                    Nginx
-
-                      |
-
-              FastAPI Container
-
-                      |
-
-              PostgreSQL Database
+                         Client
+                           |
+                           |
+                         Nginx
+                           |
+                           |
+                    FastAPI Application
+                           |
+                           |
+                      PostgreSQL
 
 
-Monitoring:
+Monitoring Pipeline:
 
-        Linux Server
+              Linux Server
+                   |
+             Node Exporter
+                   |
+              Prometheus
+                   |
+               Grafana
 
-              |
 
-        Node Exporter
+CI/CD Pipeline:
 
-              |
-
-          Prometheus
-
-              |
-
-           Grafana
+              Git Push
+                  |
+                  |
+            GitHub Actions
+                  |
+                  |
+        Install Dependencies
+                  |
+                  |
+        Start PostgreSQL Service
+                  |
+                  |
+              Run pytest
+                  |
+                  |
+                PASS
 ```
 
 ## Features
 
-### Application
+### Backend Application
 
-* RESTful API built with FastAPI
-* Employee CRUD operations
-* Pydantic schema validation
-* SQLAlchemy database integration
-* Environment-based configuration management
-* Health check endpoint
+- RESTful API with FastAPI
+- Employee CRUD operations
+- SQLAlchemy ORM integration
+- Pydantic validation
+- Environment-based configuration
+- Health check endpoint
+- Automated API testing
 
-### Deployment
+### Container Deployment
 
-* Docker containerized application
-* Docker Compose infrastructure
-* PostgreSQL database container
-* Nginx reverse proxy
-* Persistent database volumes
-* Internal Docker networking
+- Docker containerized application
+- Docker Compose orchestration
+- PostgreSQL container
+- Nginx reverse proxy
+- Persistent database storage
+- Docker internal networking
 
 ### Monitoring
 
-* Linux system monitoring
-* CPU usage monitoring
-* Memory monitoring
-* Disk monitoring
-* Network monitoring
-* Prometheus metrics collection
-* Grafana dashboards
+- Linux system monitoring
+- CPU metrics
+- Memory metrics
+- Disk metrics
+- Network metrics
+- Prometheus metrics collection
+- Grafana dashboards
 
-### Operations Practice
+### CI/CD
 
-The project includes troubleshooting records for common production issues:
+Implemented GitHub Actions pipeline:
 
-* PostgreSQL hostname resolution failure
-* Environment variable loading problems
-* Python dependency compatibility issues
-* Docker installation issues
-* Container port mapping problems
-* Docker internal DNS problems
-* Grafana monitoring data issues
+Workflow:
+
+```
+Pull Request
+      |
+      |
+GitHub Actions
+      |
+      |
+Install Python dependencies
+      |
+      |
+Start PostgreSQL service container
+      |
+      |
+Run pytest
+      |
+      |
+Merge after successful checks
+```
+
+CI validates:
+
+- Application imports
+- Database connection
+- API tests
+- Dependency installation
+
+## Engineering Highlights
+
+During development, several real-world deployment issues were investigated and documented:
+
+### Database
+
+- PostgreSQL hostname resolution failure
+- Database environment variable configuration
+- Database connection troubleshooting
+
+### Docker
+
+- Container networking problems
+- Internal DNS resolution
+- Port mapping issues
+- Service communication failures
+
+### Monitoring
+
+- Prometheus target configuration
+- Grafana datasource problems
+- Metrics collection troubleshooting
+
+### Infrastructure
+
+- Ansible SSH configuration
+- Server provisioning
+- Automated server setup
 
 ## Project Structure
 
@@ -124,14 +191,18 @@ The project includes troubleshooting records for common production issues:
 │   └── nginx.conf
 │
 ├── monitoring
-│   ├── prometheus.yml
-│   ├── alerts.yml
-│   └── grafana
+│   ├── prometheus
+│   ├── grafana
+│   └── node-exporter
 │
 ├── automation
 │   ├── backup.sh
 │   ├── health_check.sh
 │   └── user_create.sh
+│
+├── ansible
+│   ├── setup-server.yml
+│   └── docker-install.yml
 │
 └── docs
     ├── architecture.md
@@ -142,24 +213,28 @@ The project includes troubleshooting records for common production issues:
 
 ## Technology Stack
 
-| Component      | Technology           |
-| -------------- | -------------------- |
-| Backend        | FastAPI              |
-| Language       | Python               |
-| Database       | PostgreSQL           |
-| ORM            | SQLAlchemy           |
-| Container      | Docker               |
-| Deployment     | Docker Compose       |
-| Reverse Proxy  | Nginx                |
-| Monitoring     | Prometheus + Grafana |
-| System Metrics | Node Exporter        |
+| Category | Technology |
+|-|-|
+| Backend | FastAPI |
+| Language | Python 3.14 |
+| Database | PostgreSQL 16 |
+| ORM | SQLAlchemy |
+| Validation | Pydantic |
+| Container | Docker |
+| Deployment | Docker Compose |
+| Reverse Proxy | Nginx |
+| Monitoring | Prometheus + Grafana |
+| Metrics | Node Exporter |
+| CI/CD | GitHub Actions |
+| Automation | Ansible |
 
-## Installation
+
+## Running Locally
 
 ### Clone Repository
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/bugfree5635/hoho-proj.git
 
 cd hoho-proj
 ```
@@ -182,7 +257,8 @@ DATABASE_USER=admin
 DATABASE_PASSWORD=password
 ```
 
-### Start Application
+### Start Services
+
 
 ```bash
 cd docker
@@ -190,23 +266,26 @@ cd docker
 docker compose up -d
 ```
 
-Check containers:
+Check:
 
 ```bash
 docker ps
 ```
 
-Expected:
+
+Expected services:
 
 ```
-fastapi-app
-postgres-db
-nginx-proxy
+fastapi
+postgres
+nginx
+prometheus
+grafana
 ```
 
 ## Access
 
-FastAPI:
+FastAPI Swagger:
 
 ```
 http://localhost/docs
@@ -238,47 +317,49 @@ Run tests:
 pytest
 ```
 
-Example:
-
-```
-1 passed
-```
+CI automatically runs the same tests through GitHub Actions.
 
 ## Documentation
 
 Detailed documentation:
 
-* Architecture design
-* Deployment process
-* Testing strategy
-* Monitoring setup
-* Troubleshooting records
-
-Location:
-
 ```
 docs/
+
+├── architecture
+├── deployment
+├── testing
+└── troubleshooting
 ```
 
-## Development Roadmap
+Includes:
+
+- Architecture decisions
+- Deployment guides
+- Testing strategy
+- Production troubleshooting records
+
+## Roadmap
 
 Completed:
 
-* [x] FastAPI backend
-* [x] PostgreSQL integration
-* [x] Docker deployment
-* [x] Nginx reverse proxy
-* [x] Prometheus monitoring
-* [x] Grafana dashboards
+- [x] FastAPI backend
+- [x] PostgreSQL integration
+- [x] Docker deployment
+- [x] Nginx reverse proxy
+- [x] Prometheus monitoring
+- [x] Grafana dashboards
+- [x] GitHub Actions CI pipeline
+- [x] Ansible automation
 
 Future:
 
-* [ ] CI/CD pipeline
-* [ ] GitHub Actions
-* [ ] Automated deployment
-* [ ] Ansible server provisioning
-* [ ] Kubernetes deployment
+- [ ] Automated production deployment
+- [ ] Docker image publishing
+- [ ] Kubernetes deployment
+- [ ] Database migration automation
+- [ ] Security scanning pipeline
 
-## License
+# License
 
-This project is released under the MIT License.
+MIT License
