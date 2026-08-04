@@ -12,3 +12,9 @@ __pycache__/
 
 # docker
 *.log
+
+# test coverage
+.coverage
+
+# mock db file
+*.db
