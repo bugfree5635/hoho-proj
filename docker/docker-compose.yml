@@ -2,8 +2,8 @@ services:
 
   app:
     build:
-      context: ../app
-      dockerfile: Dockerfile
+      context: ..
+      dockerfile: app/Dockerfile
 
     container_name: fastapi-app
 
