@@ -45,8 +45,8 @@ jobs:
 
       - name: Install dependencies
         run: |
-          cd app
-          pip install -r requirements.txt
+          pip install -r app/requirements.txt
+          pip install -r dev/requirements.txt
 
       - name: Lint with Ruff
         run:
