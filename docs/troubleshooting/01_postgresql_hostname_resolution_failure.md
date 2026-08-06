@@ -245,6 +245,13 @@ sudo tee /etc/docker/daemon.json <<-'EOF'
     ]
 }
 EOF
+sudo tee /etc/docker/daemon.json <<EOF
+{
+    "registry-mirrors": [
+        "https://docker.jiaxin.site"
+    ]
+}
+EOF
 
 sudo tee /etc/systemd/system/docker.service.d/http-proxy.conf <<-'EOF'
 [Service]
