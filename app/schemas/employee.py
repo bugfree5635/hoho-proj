@@ -1,7 +1,6 @@
 from pydantic import BaseModel, ConfigDict
 
 
-
 class EmployeeCreate(BaseModel):
 
     name: str
@@ -9,7 +8,6 @@ class EmployeeCreate(BaseModel):
     email: str
 
     department: str
-
 
 
 class EmployeeResponse(BaseModel):
@@ -22,8 +20,4 @@ class EmployeeResponse(BaseModel):
 
     department: str
 
-
-
-    model_config = ConfigDict(
-        from_attributes=True
-    )
+    model_config = ConfigDict(from_attributes=True)

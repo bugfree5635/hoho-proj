@@ -39,6 +39,10 @@ GitHub Actions
 
     |
     |
+ Code Quality Check
+
+    |
+    |
  Run pytest
 
     |
@@ -67,14 +71,11 @@ Current workflow file:
 Pipeline steps:
 
 1. Checkout repository
-
 2. Setup Python environment
-
 3. Start PostgreSQL database service
-
 4. Install application dependencies
-
-5. Run automated tests
+5. Run code quality checks
+6. Run automated tests
 
 Example workflow:
 
@@ -246,6 +247,10 @@ Git Push
     |
     |
 GitHub Actions
+
+    |
+    |
+Code Quality Check
 
     |
     |
