@@ -1,12 +1,20 @@
 [tool.black]
 line-length = 88
 target-version = ["py314"]
-
+exclude = '''
+/(
+    \.git
+  | \.venv
+  | alembic/versions/*
+)/
+'''
 
 [tool.ruff]
 line-length = 88
 target-version = "py314"
-
+exclude = [
+    "alembic/versions/*"
+]
 
 [tool.ruff.lint]
 select = [

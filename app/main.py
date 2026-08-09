@@ -7,16 +7,11 @@ from prometheus_client import generate_latest
 
 from .api.employees import router
 from .database.connection import engine
-from .database.models import Base
 from .monitoring.metrics import REQUEST_COUNT, REQUEST_TIME
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-
-    # startup
-    Base.metadata.create_all(bind=engine)
-
     yield
 
     # shutdown

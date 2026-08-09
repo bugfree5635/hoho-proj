@@ -1,0 +1,15 @@
+feat: initialize employee management API with Docker deployment
+
+feat: add nginx reverse proxy configuration
+
+test: add employee API endpoint tests
+
+docs: document docker deployment troubleshooting
+
+fix: resolve docker python import path issue
+
+fix: resolve postgres container hostname configuration
+
+build: add docker compose production environment
+
+feat: add prometheus monitoring configuration
