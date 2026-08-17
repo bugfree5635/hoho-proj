@@ -1,15 +1,15 @@
-from fastapi.testclient import TestClient
 from datetime import datetime, timezone
+
+from fastapi.testclient import TestClient
 from jose import jwt
+
 from app.main import app
-from app.security.auth import (
-    hash_password,
-    verify_password,
-    create_access_token,
-)
 from app.security.auth import (
     ALGORITHM,
     SECRET_KEY,
+    create_access_token,
+    hash_password,
+    verify_password,
 )
 
 client = TestClient(app)
