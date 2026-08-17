@@ -5,6 +5,7 @@ from fastapi import FastAPI
 from fastapi.responses import Response
 from prometheus_client import generate_latest
 
+from .api.auth import router as auth_router
 from .api.employees import router
 from .database.connection import engine
 from .monitoring.metrics import REQUEST_COUNT, REQUEST_TIME
@@ -22,6 +23,7 @@ app = FastAPI(title="Employee Management API", version="1.0", lifespan=lifespan)
 
 
 app.include_router(router)
+app.include_router(auth_router)
 
 
 @app.get("/health")
