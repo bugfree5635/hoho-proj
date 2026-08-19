@@ -18,3 +18,5 @@ __pycache__/
 
 # mock db file
 *.db
+
+backups/
