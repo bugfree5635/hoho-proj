@@ -1,13 +1,16 @@
 import time
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI
-from fastapi.responses import Response
+from fastapi import Depends, FastAPI
+from fastapi.responses import JSONResponse, Response
 from prometheus_client import generate_latest
+from sqlalchemy import text
+from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.orm import Session
 
 from .api.auth import router as auth_router
 from .api.employees import router
-from .database.connection import engine
+from .database.connection import engine, get_database
 from .monitoring.metrics import REQUEST_COUNT, REQUEST_TIME
 
 
@@ -27,9 +30,15 @@ app.include_router(auth_router)
 
 
 @app.get("/health")
-def health_check():
-
-    return {"status": "ok"}
+def health_check(db: Session = Depends(get_database)):
+    try:
+        db.execute(text("SELECT 1"))
+        return {"status": "ok", "database": "ok"}
+    except SQLAlchemyError:
+        return JSONResponse(
+            status_code=503,
+            content={"status": "unhealthy", "database": "unavailable"},
+        )
 
 
 @app.middleware("http")
