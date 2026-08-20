@@ -1,19 +1,17 @@
 import time
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI, Depends
-from fastapi.responses import JSONResponse
+from fastapi import Depends, FastAPI
+from fastapi.responses import JSONResponse, Response
+from prometheus_client import generate_latest
 from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
-from fastapi.responses import Response
-from prometheus_client import generate_latest
 
 from .api.auth import router as auth_router
 from .api.employees import router
-from .database.connection import engine
+from .database.connection import engine, get_database
 from .monitoring.metrics import REQUEST_COUNT, REQUEST_TIME
-from .database.connection import get_database
 
 
 @asynccontextmanager
