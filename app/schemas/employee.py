@@ -9,6 +9,19 @@ class EmployeeCreate(BaseModel):
 
     department: str
 
+    model_config = ConfigDict(
+        from_attributes=True,
+        json_schema_extra={
+            "examples": [
+                {
+                    "name": "Henry",
+                    "email": "henry@example.com",
+                    "department": "Engineering",
+                }
+            ]
+        }
+    )
+
 
 class EmployeeResponse(BaseModel):
 

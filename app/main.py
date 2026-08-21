@@ -22,7 +22,25 @@ async def lifespan(app: FastAPI):
     engine.dispose()
 
 
-app = FastAPI(title="Employee Management API", version="1.0", lifespan=lifespan)
+app = FastAPI(
+    title="Employee Management API",
+    description="""
+A REST API for managing employees and users.
+
+## Features
+
+- Employee management
+- User authentication
+- JWT authentication
+- PostgreSQL database
+- Health monitoring
+""",
+    version="1.0",
+    contact={
+        "name": "Henry",
+    },
+    lifespan=lifespan,
+)
 
 
 app.include_router(router)

@@ -8,13 +8,23 @@ from ..schemas.employee import EmployeeCreate, EmployeeResponse
 router = APIRouter(prefix="/employees", tags=["Employees"])
 
 
-@router.get("/", response_model=list[EmployeeResponse])
+@router.get(
+    "/",
+    summary="List employees",
+    description="Return all employees stored in the database.",
+    response_model=list[EmployeeResponse],
+)
 def get_employees(db: Session = Depends(get_database)):
 
     return db.query(Employee).all()
 
 
-@router.post("/", response_model=EmployeeResponse)
+@router.post(
+    "/",
+    summary="Create an employee",
+    description="Create a new employee record.",
+    response_model=EmployeeResponse,
+)
 def create_employee(employee: EmployeeCreate, db: Session = Depends(get_database)):
 
     new_employee = Employee(
