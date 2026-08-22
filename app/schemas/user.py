@@ -14,7 +14,7 @@ class UserCreate(BaseModel):
                     "password": "example-password",
                 }
             ]
-        }
+        },
     )
 
 

@@ -19,7 +19,7 @@ class EmployeeCreate(BaseModel):
                     "department": "Engineering",
                 }
             ]
-        }
+        },
     )
 
 

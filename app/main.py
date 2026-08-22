@@ -35,7 +35,7 @@ A REST API for managing employees and users.
 - PostgreSQL database
 - Health monitoring
 """,
-    version="1.0",
+    version="1.0.0",
     contact={
         "name": "Henry",
     },
@@ -47,7 +47,12 @@ app.include_router(router)
 app.include_router(auth_router)
 
 
-@app.get("/health")
+@app.get(
+    "/health",
+    tags=["Health"],
+    summary="Check application health",
+    description="Check whether the API and PostgreSQL database are available.",
+)
 def health_check(db: Session = Depends(get_database)):
     try:
         db.execute(text("SELECT 1"))

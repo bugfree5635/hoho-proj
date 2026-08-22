@@ -13,6 +13,7 @@ router = APIRouter(prefix="/employees", tags=["Employees"])
     summary="List employees",
     description="Return all employees stored in the database.",
     response_model=list[EmployeeResponse],
+    response_description="A List of employees.",
 )
 def get_employees(db: Session = Depends(get_database)):
 
