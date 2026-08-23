@@ -11,6 +11,7 @@ from sqlalchemy.orm import Session
 from .api.auth import router as auth_router
 from .api.employees import router
 from .database.connection import engine, get_database
+from .middleware.request_id import request_id_middleware
 from .monitoring.metrics import REQUEST_COUNT, REQUEST_TIME
 
 
@@ -43,6 +44,7 @@ A REST API for managing employees and users.
 )
 
 
+app.middleware("http")(request_id_middleware)
 app.include_router(router)
 app.include_router(auth_router)
 
