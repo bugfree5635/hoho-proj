@@ -10,6 +10,7 @@ from sqlalchemy.orm import Session
 
 from .api.auth import router as auth_router
 from .api.employees import router
+from .core.logger import setup_logging
 from .database.connection import engine, get_database
 from .middleware.request_id import request_id_middleware
 from .monitoring.metrics import REQUEST_COUNT, REQUEST_TIME
@@ -22,6 +23,8 @@ async def lifespan(app: FastAPI):
     # shutdown
     engine.dispose()
 
+
+setup_logging()
 
 app = FastAPI(
     title="Employee Management API",

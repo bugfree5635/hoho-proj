@@ -52,8 +52,42 @@ services:
     networks:
       - backend
 
-networks:
+  loki:
+    image: grafana/loki:latest
+    container_name: loki
 
+    ports:
+      - "3100:3100"
+
+    volumes:
+      - ./loki/loki-config.yml:/etc/loki/config.yml
+
+    command: -config.file=/etc/loki/config.yml
+
+    networks:
+      - backend
+
+  alloy:
+    image: grafana/alloy:latest
+    container_name: grafana-alloy
+
+    volumes:
+      - ./alloy/config.alloy:/etc/alloy/config.alloy
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+
+    command:
+      - run
+      - /etc/alloy/config.alloy
+      - --server.http.listen-addr=0.0.0.0:12345
+
+    depends_on:
+      - loki
+
+    networks:
+      - backend
+
+networks:
   backend:
-    external: 
-      name: docker_backend
+    external: true
+    name: docker_backend
