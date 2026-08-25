@@ -104,9 +104,10 @@ jobs:
       - name: Validate Prometheus configuration
         run: |
           docker run --rm \
+            --entrypoint promtool \
             -v ${{ github.workspace }}/monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml \
             prom/prometheus \
-            promtool check config /etc/prometheus/prometheus.yml
+            check config /etc/prometheus/prometheus.yml
 
       # i will open it when i get a public server
       # - name: Deploy
